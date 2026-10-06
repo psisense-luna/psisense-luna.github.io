@@ -1,0 +1,5 @@
+Teste de integração ChatGPT ↔ GitHub (PsiSense Luna)
+
+Se você está lendo este arquivo, a conexão de escrita no repositório da PsiSense está funcionando corretamente.
+
+Data do teste: 2026-10-06
