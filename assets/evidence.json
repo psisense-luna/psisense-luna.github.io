@@ -1,0 +1,51 @@
+{
+  "title": "PsiSense Luna — TCR-H Legacy V7 / V8 research evidence",
+  "documentation_period": "September–October 2026",
+  "source": "RESULTADOS_CONGELADOS.md, supplied research package TCR_H_LIVE_FINAL_V7",
+  "source_dataset": "VitalDB",
+  "label": "Upper versus lower within-case pharmacological exposure quartiles (q75 / q25), defined retrospectively",
+  "intervals": "95% patient-bootstrap confidence intervals; exploratory development and multiple comparisons not accounted for",
+  "v8_unique_cases": 1326,
+  "v8_epoch_domain_observations": 324836,
+  "v8_case_domain_pairs": 2079,
+  "scope": "Retrospective research; same-source additional cases, not an independent-site validation. V7 memory comparator is a research model using BIS history, not the marketed BIS product.",
+  "metrics": {
+    "within": {
+      "version": "V8",
+      "definition": "Mean of within-case AUCs; equal case weight",
+      "comparator": "Observed BIS, oriented as 100 − BIS",
+      "rows": [
+        {"domain":"des_exp","cases":207,"epochs":15037,"tcr":0.77093,"bis":0.83534,"delta":-0.06441,"ci":[-0.10125,-0.02634]},
+        {"domain":"propofol_ce","cases":651,"epochs":108492,"tcr":0.81624,"bis":0.70074,"delta":0.11550,"ci":[0.09902,0.13232]},
+        {"domain":"remi20_ce","cases":770,"epochs":121884,"tcr":0.66040,"bis":0.62924,"delta":0.03116,"ci":[0.01550,0.04779]},
+        {"domain":"remi50_ce","cases":9,"epochs":3013,"tcr":0.53479,"bis":0.60300,"delta":-0.06821,"ci":[-0.16946,0.01858]},
+        {"domain":"sevo_exp","cases":442,"epochs":76410,"tcr":0.79640,"bis":0.73791,"delta":0.05850,"ci":[0.03692,0.07814]}
+      ]
+    },
+    "global": {
+      "version": "V8",
+      "definition": "Global AUC, pooling matched epochs across cases",
+      "comparator": "Observed BIS, oriented as 100 − BIS",
+      "rows": [
+        {"domain":"des_exp","cases":207,"epochs":15037,"tcr":0.80009,"bis":0.76083,"delta":0.03926,"ci":[0.00115,0.08449]},
+        {"domain":"propofol_ce","cases":651,"epochs":108492,"tcr":0.77683,"bis":0.65301,"delta":0.12381,"ci":[0.10609,0.14335]},
+        {"domain":"remi20_ce","cases":770,"epochs":121884,"tcr":0.62197,"bis":0.58432,"delta":0.03765,"ci":[0.02148,0.05565]},
+        {"domain":"remi50_ce","cases":9,"epochs":3013,"tcr":0.51141,"bis":0.59849,"delta":-0.08708,"ci":[-0.19142,-0.00001]},
+        {"domain":"sevo_exp","cases":442,"epochs":76410,"tcr":0.79058,"bis":0.67742,"delta":0.11316,"ci":[0.09313,0.13180]}
+      ]
+    },
+    "memory": {
+      "version": "V7",
+      "definition": "Global AUC versus BIS supplied with causal history and state update",
+      "comparator": "BIS + causal memory + state (research comparator)",
+      "rows": [
+        {"domain":"des_exp","cases":18,"epochs":1874,"tcr":0.7671,"bis":0.5728,"delta":0.1943,"ci":[-0.0603,0.3745]},
+        {"domain":"propofol_ce","cases":149,"epochs":25829,"tcr":0.7814,"bis":0.7453,"delta":0.0361,"ci":[0.0075,0.0593]},
+        {"domain":"remi20_ce","cases":414,"epochs":73195,"tcr":0.6478,"bis":0.5930,"delta":0.0548,"ci":[0.0376,0.0733]},
+        {"domain":"remi50_ce","cases":6,"epochs":1272,"tcr":0.5576,"bis":0.5419,"delta":0.0157,"ci":[-0.0749,0.2449]},
+        {"domain":"sevo_exp","cases":75,"epochs":12210,"tcr":0.7624,"bis":0.7182,"delta":0.0442,"ci":[0.0041,0.0985]}
+      ]
+    }
+  },
+  "parity": {"version":"V7","cases":25,"epochs":4947,"maximum_raw_score_error":3.33e-16,"maximum_state_score_error":2.22e-16,"scope":"Prediction replay, not full raw-signal-to-monitor verification"}
+}
