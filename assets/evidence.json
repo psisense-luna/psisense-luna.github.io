@@ -1,51 +1,426 @@
 {
-  "title": "PsiSense Luna — TCR-H Legacy V7 / V8 research evidence",
-  "documentation_period": "September–October 2026",
-  "source": "RESULTADOS_CONGELADOS.md, supplied research package TCR_H_LIVE_FINAL_V7",
-  "source_dataset": "VitalDB",
-  "label": "Upper versus lower within-case pharmacological exposure quartiles (q75 / q25), defined retrospectively",
-  "intervals": "95% patient-bootstrap confidence intervals; exploratory development and multiple comparisons not accounted for",
-  "v8_unique_cases": 1326,
-  "v8_epoch_domain_observations": 324836,
-  "v8_case_domain_pairs": 2079,
-  "scope": "Retrospective research; same-source additional cases, not an independent-site validation. V7 memory comparator is a research model using BIS history, not the marketed BIS product.",
-  "metrics": {
-    "within": {
-      "version": "V8",
-      "definition": "Mean of within-case AUCs; equal case weight",
-      "comparator": "Observed BIS, oriented as 100 − BIS",
-      "rows": [
-        {"domain":"des_exp","cases":207,"epochs":15037,"tcr":0.77093,"bis":0.83534,"delta":-0.06441,"ci":[-0.10125,-0.02634]},
-        {"domain":"propofol_ce","cases":651,"epochs":108492,"tcr":0.81624,"bis":0.70074,"delta":0.11550,"ci":[0.09902,0.13232]},
-        {"domain":"remi20_ce","cases":770,"epochs":121884,"tcr":0.66040,"bis":0.62924,"delta":0.03116,"ci":[0.01550,0.04779]},
-        {"domain":"remi50_ce","cases":9,"epochs":3013,"tcr":0.53479,"bis":0.60300,"delta":-0.06821,"ci":[-0.16946,0.01858]},
-        {"domain":"sevo_exp","cases":442,"epochs":76410,"tcr":0.79640,"bis":0.73791,"delta":0.05850,"ci":[0.03692,0.07814]}
-      ]
+  "version": "2026-10-10 / Luna 0.3 + RI16",
+  "source_package": "PsiSense_Luna_Dossie_Completo_v03_RI16.zip",
+  "primary": {
+    "dataset": "DOSE-I",
+    "n": 886,
+    "recordings": 43,
+    "responsive": 98,
+    "nonresponsive": 788,
+    "development_n": 2408,
+    "development_recordings": 128,
+    "window_s": 16,
+    "metrics": {
+      "TCR_HYBRID": {
+        "auc": 0.9530845333057082,
+        "recording_balanced_auc": 0.9480216488886276,
+        "brier": 0.05051864461590657,
+        "sensitivity": 0.9251269035532995,
+        "specificity": 0.826530612244898,
+        "macro_within_recording_auc": 0.9750233242540934,
+        "both_class_recordings": 26,
+        "auc_ci95_cluster": [
+          0.9189306710420002,
+          0.9806630940264298
+        ]
+      },
+      "TCR_ORI": {
+        "auc": 0.941948099036569,
+        "recording_balanced_auc": 0.9438795033007342,
+        "brier": 0.05082231600449994,
+        "sensitivity": 0.8769035532994924,
+        "specificity": 0.8673469387755102,
+        "macro_within_recording_auc": 0.9657900333903678,
+        "both_class_recordings": 26,
+        "auc_ci95_cluster": [
+          0.8983095930155666,
+          0.9786855912599167
+        ]
+      },
+      "TCR_DRI": {
+        "auc": 0.8994483580234125,
+        "recording_balanced_auc": 0.8707875219011171,
+        "brier": 0.06715794705948776,
+        "sensitivity": 0.8312182741116751,
+        "specificity": 0.7551020408163265,
+        "macro_within_recording_auc": 0.9016506929867253,
+        "both_class_recordings": 26,
+        "auc_ci95_cluster": [
+          0.8250711459237189,
+          0.9490336305732855
+        ]
+      },
+      "WSMF_RAW": {
+        "auc": 0.945373200041438,
+        "auc_ci95_cluster": [
+          0.905028937355914,
+          0.9755930076278305
+        ]
+      },
+      "pEEG10_RF": {
+        "auc": 0.9415078214026726,
+        "recording_balanced_auc": 0.9186767731174894,
+        "brier": 0.05378656334723776,
+        "sensitivity": 0.8375634517766497,
+        "specificity": 0.9285714285714286,
+        "macro_within_recording_auc": 0.8932935991134373,
+        "both_class_recordings": 26,
+        "auc_ci95_cluster": [
+          0.8841359670652299,
+          0.9739522385929931
+        ]
+      },
+      "TCR10_RF": {
+        "auc": 0.8697943644462862,
+        "recording_balanced_auc": 0.855396946623448,
+        "brier": 0.06626540564771531,
+        "sensitivity": 0.8604060913705583,
+        "specificity": 0.7448979591836735,
+        "macro_within_recording_auc": 0.8259387533489805,
+        "both_class_recordings": 26,
+        "auc_ci95_cluster": [
+          0.7757862299596505,
+          0.9398970075043914
+        ]
+      },
+      "ORI_FIXED": {
+        "auc": 0.579508960944784,
+        "auc_ci95_cluster": [
+          0.514452876367108,
+          0.6758910051038454
+        ]
+      }
     },
-    "global": {
-      "version": "V8",
-      "definition": "Global AUC, pooling matched epochs across cases",
-      "comparator": "Observed BIS, oriented as 100 − BIS",
-      "rows": [
-        {"domain":"des_exp","cases":207,"epochs":15037,"tcr":0.80009,"bis":0.76083,"delta":0.03926,"ci":[0.00115,0.08449]},
-        {"domain":"propofol_ce","cases":651,"epochs":108492,"tcr":0.77683,"bis":0.65301,"delta":0.12381,"ci":[0.10609,0.14335]},
-        {"domain":"remi20_ce","cases":770,"epochs":121884,"tcr":0.62197,"bis":0.58432,"delta":0.03765,"ci":[0.02148,0.05565]},
-        {"domain":"remi50_ce","cases":9,"epochs":3013,"tcr":0.51141,"bis":0.59849,"delta":-0.08708,"ci":[-0.19142,-0.00001]},
-        {"domain":"sevo_exp","cases":442,"epochs":76410,"tcr":0.79058,"bis":0.67742,"delta":0.11316,"ci":[0.09313,0.13180]}
-      ]
+    "paired_deltas": {
+      "TCR_HYBRID_minus_WSMF_RF": {
+        "delta": 0.05585698746503698,
+        "ci95": [
+          0.020696871050019792,
+          0.12590202062209224
+        ]
+      },
+      "TCR_HYBRID_minus_WSMF_RAW": {
+        "delta": 0.007711333264270204,
+        "ci95": [
+          -0.00882586671233331,
+          0.04068878369142125
+        ]
+      },
+      "TCR_HYBRID_minus_pEEG10_RF": {
+        "delta": 0.011576711903035553,
+        "ci95": [
+          -0.016012560505724655,
+          0.06009804178748291
+        ]
+      },
+      "TCR_HYBRID_minus_TCR10_RF": {
+        "delta": 0.08329016885942198,
+        "ci95": [
+          0.03602217391611673,
+          0.15424143510146754
+        ]
+      }
+    }
+  },
+  "coverage": {
+    "posthoc": true,
+    "retrained": false,
+    "n": 943,
+    "recordings": 43,
+    "extra_assessments": 57,
+    "metrics": {
+      "TCR_HYBRID": {
+        "auc": 0.956427980621529,
+        "recording_balanced_auc": 0.9483180867946621,
+        "brier": 0.056238091810731375,
+        "sensitivity": 0.9206349206349206,
+        "specificity": 0.8387096774193549,
+        "macro_within_recording_auc": 0.9737630008955814,
+        "both_class_recordings": 34,
+        "auc_ci95_cluster": [
+          0.9287310124264146,
+          0.9798429134891915
+        ]
+      },
+      "TCR_ORI": {
+        "auc": 0.9483142305722951,
+        "recording_balanced_auc": 0.9464356284823723,
+        "brier": 0.05696911028159673,
+        "sensitivity": 0.8766788766788767,
+        "specificity": 0.8870967741935484,
+        "macro_within_recording_auc": 0.9677217107191156,
+        "both_class_recordings": 34,
+        "auc_ci95_cluster": [
+          0.9116558894877962,
+          0.9798816155973114
+        ]
+      },
+      "TCR_DRI": {
+        "auc": 0.9038461538461539,
+        "recording_balanced_auc": 0.8707258796974133,
+        "brier": 0.07636163069171532,
+        "sensitivity": 0.8241758241758241,
+        "specificity": 0.782258064516129,
+        "macro_within_recording_auc": 0.9180929985856229,
+        "both_class_recordings": 34,
+        "auc_ci95_cluster": [
+          0.8403884242752121,
+          0.9479889451510474
+        ]
+      },
+      "WSMF_RAW": {
+        "auc": 0.9469553743747292,
+        "auc_ci95_cluster": [
+          0.9075267355923637,
+          0.9738039976940956
+        ]
+      }
     },
-    "memory": {
-      "version": "V7",
-      "definition": "Global AUC versus BIS supplied with causal history and state update",
-      "comparator": "BIS + causal memory + state (research comparator)",
-      "rows": [
-        {"domain":"des_exp","cases":18,"epochs":1874,"tcr":0.7671,"bis":0.5728,"delta":0.1943,"ci":[-0.0603,0.3745]},
-        {"domain":"propofol_ce","cases":149,"epochs":25829,"tcr":0.7814,"bis":0.7453,"delta":0.0361,"ci":[0.0075,0.0593]},
-        {"domain":"remi20_ce","cases":414,"epochs":73195,"tcr":0.6478,"bis":0.5930,"delta":0.0548,"ci":[0.0376,0.0733]},
-        {"domain":"remi50_ce","cases":6,"epochs":1272,"tcr":0.5576,"bis":0.5419,"delta":0.0157,"ci":[-0.0749,0.2449]},
-        {"domain":"sevo_exp","cases":75,"epochs":12210,"tcr":0.7624,"bis":0.7182,"delta":0.0442,"ci":[0.0041,0.0985]}
+    "hybrid_minus_wsmf_raw": {
+      "delta": 0.009472606246799797,
+      "ci95": [
+        -0.006887693345764942,
+        0.039254501663368926
       ]
     }
   },
-  "parity": {"version":"V7","cases":25,"epochs":4947,"maximum_raw_score_error":3.33e-16,"maximum_state_score_error":2.22e-16,"scope":"Prediction replay, not full raw-signal-to-monitor verification"}
+  "legacy": {
+    "title": "PsiSense Luna — TCR-H Legacy V7 / V8 research evidence",
+    "documentation_period": "September–October 2026",
+    "source": "RESULTADOS_CONGELADOS.md, supplied research package TCR_H_LIVE_FINAL_V7",
+    "source_dataset": "VitalDB",
+    "label": "Upper versus lower within-case pharmacological exposure quartiles (q75 / q25), defined retrospectively",
+    "intervals": "95% patient-bootstrap confidence intervals; exploratory development and multiple comparisons not accounted for",
+    "v8_unique_cases": 1326,
+    "v8_epoch_domain_observations": 324836,
+    "v8_case_domain_pairs": 2079,
+    "scope": "Retrospective research; same-source additional cases, not an independent-site validation. V7 memory comparator is a research model using BIS history, not the marketed BIS product.",
+    "metrics": {
+      "within": {
+        "version": "V8",
+        "definition": "Mean of within-case AUCs; equal case weight",
+        "comparator": "Observed BIS, oriented as 100 − BIS",
+        "rows": [
+          {
+            "domain": "des_exp",
+            "cases": 207,
+            "epochs": 15037,
+            "tcr": 0.77093,
+            "bis": 0.83534,
+            "delta": -0.06441,
+            "ci": [
+              -0.10125,
+              -0.02634
+            ]
+          },
+          {
+            "domain": "propofol_ce",
+            "cases": 651,
+            "epochs": 108492,
+            "tcr": 0.81624,
+            "bis": 0.70074,
+            "delta": 0.1155,
+            "ci": [
+              0.09902,
+              0.13232
+            ]
+          },
+          {
+            "domain": "remi20_ce",
+            "cases": 770,
+            "epochs": 121884,
+            "tcr": 0.6604,
+            "bis": 0.62924,
+            "delta": 0.03116,
+            "ci": [
+              0.0155,
+              0.04779
+            ]
+          },
+          {
+            "domain": "remi50_ce",
+            "cases": 9,
+            "epochs": 3013,
+            "tcr": 0.53479,
+            "bis": 0.603,
+            "delta": -0.06821,
+            "ci": [
+              -0.16946,
+              0.01858
+            ]
+          },
+          {
+            "domain": "sevo_exp",
+            "cases": 442,
+            "epochs": 76410,
+            "tcr": 0.7964,
+            "bis": 0.73791,
+            "delta": 0.0585,
+            "ci": [
+              0.03692,
+              0.07814
+            ]
+          }
+        ]
+      },
+      "global": {
+        "version": "V8",
+        "definition": "Global AUC, pooling matched epochs across cases",
+        "comparator": "Observed BIS, oriented as 100 − BIS",
+        "rows": [
+          {
+            "domain": "des_exp",
+            "cases": 207,
+            "epochs": 15037,
+            "tcr": 0.80009,
+            "bis": 0.76083,
+            "delta": 0.03926,
+            "ci": [
+              0.00115,
+              0.08449
+            ]
+          },
+          {
+            "domain": "propofol_ce",
+            "cases": 651,
+            "epochs": 108492,
+            "tcr": 0.77683,
+            "bis": 0.65301,
+            "delta": 0.12381,
+            "ci": [
+              0.10609,
+              0.14335
+            ]
+          },
+          {
+            "domain": "remi20_ce",
+            "cases": 770,
+            "epochs": 121884,
+            "tcr": 0.62197,
+            "bis": 0.58432,
+            "delta": 0.03765,
+            "ci": [
+              0.02148,
+              0.05565
+            ]
+          },
+          {
+            "domain": "remi50_ce",
+            "cases": 9,
+            "epochs": 3013,
+            "tcr": 0.51141,
+            "bis": 0.59849,
+            "delta": -0.08708,
+            "ci": [
+              -0.19142,
+              -1e-05
+            ]
+          },
+          {
+            "domain": "sevo_exp",
+            "cases": 442,
+            "epochs": 76410,
+            "tcr": 0.79058,
+            "bis": 0.67742,
+            "delta": 0.11316,
+            "ci": [
+              0.09313,
+              0.1318
+            ]
+          }
+        ]
+      },
+      "memory": {
+        "version": "V7",
+        "definition": "Global AUC versus BIS supplied with causal history and state update",
+        "comparator": "BIS + causal memory + state (research comparator)",
+        "rows": [
+          {
+            "domain": "des_exp",
+            "cases": 18,
+            "epochs": 1874,
+            "tcr": 0.7671,
+            "bis": 0.5728,
+            "delta": 0.1943,
+            "ci": [
+              -0.0603,
+              0.3745
+            ]
+          },
+          {
+            "domain": "propofol_ce",
+            "cases": 149,
+            "epochs": 25829,
+            "tcr": 0.7814,
+            "bis": 0.7453,
+            "delta": 0.0361,
+            "ci": [
+              0.0075,
+              0.0593
+            ]
+          },
+          {
+            "domain": "remi20_ce",
+            "cases": 414,
+            "epochs": 73195,
+            "tcr": 0.6478,
+            "bis": 0.593,
+            "delta": 0.0548,
+            "ci": [
+              0.0376,
+              0.0733
+            ]
+          },
+          {
+            "domain": "remi50_ce",
+            "cases": 6,
+            "epochs": 1272,
+            "tcr": 0.5576,
+            "bis": 0.5419,
+            "delta": 0.0157,
+            "ci": [
+              -0.0749,
+              0.2449
+            ]
+          },
+          {
+            "domain": "sevo_exp",
+            "cases": 75,
+            "epochs": 12210,
+            "tcr": 0.7624,
+            "bis": 0.7182,
+            "delta": 0.0442,
+            "ci": [
+              0.0041,
+              0.0985
+            ]
+          }
+        ]
+      }
+    },
+    "parity": {
+      "version": "V7",
+      "cases": 25,
+      "epochs": 4947,
+      "maximum_raw_score_error": 3.33e-16,
+      "maximum_state_score_error": 2.22e-16,
+      "scope": "Prediction replay, not full raw-signal-to-monitor verification"
+    }
+  },
+  "limitations": [
+    "Recording ID does not prove unique patient linkage.",
+    "Holdout CIs condition on fitted models, do not include model-selection variability.",
+    "Several comparisons are exploratory and no multiplicity adjustment is applied.",
+    "16s recomputed TCR differs from the historical 30s model.",
+    "Provider WSMF and pEEG10 are retrospective references: public C code uses centered windows, symmetric smoothing and full-record Fourier transforms. The primary WSMF_RAW and WSMF_RF controls are recomputed on exactly the past 16 seconds and are not bit-identical provider implementations.",
+    "MOAA/S extremes measure observed responsiveness, not subjective consciousness.",
+    "TCR and hybrid inputs include ECG-derived legacy axes; ORI uses only EEG."
+  ],
+  "sources": [
+    "INDICE_ATUAL.md",
+    "04_tabelas/RI16_verificacao_resultados_10-10-2026.json",
+    "09_RI16/PsiSense_TCR_RI16_v01/evidence/summary.json",
+    "09_RI16/PsiSense_TCR_RI16_v01/evidence/coverage_sensitivity.json"
+  ],
+  "scope": "Exploratory recording holdout within an already explored dataset. Not independent external validation. MOAA/S extremes measure observed responsiveness, not subjective consciousness. No model equations, coefficients, weights, raw patient signals or individual predictions in this public export."
 }

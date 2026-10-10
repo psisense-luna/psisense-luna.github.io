@@ -1,181 +1,129 @@
-"use strict";
+'use strict';
 (() => {
-  const $ = (id) => document.getElementById(id);
-  const nodes = Array.from(document.querySelectorAll('[data-i18n]'));
-  const en = Object.fromEntries(nodes.map(n => [n.dataset.i18n, n.innerHTML]));
-  const pt = {
-    'skip':'Ir para o conteúdo',
-    'nav.tech':'Tecnologia', 'nav.evidence':'Evidências', 'nav.contact':'Vamos colaborar ↗',
-    'hero.label':'NEUROFISIOLOGIA, COM CONTEXTO', 'hero.title':'Além de um<br>único instante.',
-    'hero.body':'A atividade cerebral tem uma história.<br>O PsiSense Luna coloca essa história em foco.',
-    'hero.explore':'Explore as evidências ↗', 'hero.how':'Conheça a arquitetura ↓',
-    'hero.version':'TCR-H · Legacy V7 · Plataforma de pesquisa', 'hero.by':'PESQUISA INDEPENDENTE DE', 'hero.scroll':'Role para explorar',
-    'scene.a':'Sinal neurofisiológico', 'scene.b':'Descritores TCR-H', 'scene.c':'Memória causal',
-    'scene.caption':'UM SINAL. UMA HISTÓRIA. OUTRA PERSPECTIVA.',
-    'tech.label':'01 / A TECNOLOGIA', 'tech.version':'Arquitetura atual · Legacy V7',
-    'tech.title':'O sinal importa.<br>O que veio antes também.',
-    'tech.body':'A TCR-H extrai descritores neurofisiológicos do EEG e do ECG. Uma memória causal em múltiplas escalas contextualiza cada época usando o histórico disponível do mesmo caso.',
-    'tech.sub':'O pipeline de referência usa dois canais de EEG a 128 Hz, ECG e épocas de 30 segundos. Cinco modelos específicos por domínio são treinados e congelados.',
-    'arch.1':'Adquirir e descrever', 'arch.1b':'Extrair uma visão estruturada dos sinais pelos componentes da TCR-H.',
-    'arch.2':'Contextualizar causalmente', 'arch.2b':'Comparar a época atual com observações anteriores em diferentes escalas de tempo.',
-    'arch.3':'Estimar e apresentar', 'arch.3b':'Usar modelos congelados e uma atualização de estado para produzir um escore contínuo de pesquisa.',
-    'memory.label':'CONTEXTO TEMPORAL, VISÍVEL', 'memory.title':'Cada época<br>tem um antes.',
-    'memory.body':'Percorra um sinal para ver seu passado se tornar contexto. A área sombreada acompanha o instante escolhido. As amostras futuras ficam fora do cálculo.',
-    'memory.note':'Ilustração conceitual · sinal sintético, sem predição do modelo',
-    'memory.input':'Histórico do sinal', 'memory.slider':'Selecione a época atual', 'memory.play':'Reproduzir',
-    'memory.past':'Sinal observado', 'memory.mean':'Média apenas do passado',
-    'evidence.label':'02 / AS EVIDÊNCIAS', 'evidence.date':'Retrato da pesquisa · setembro de 2026',
-    'evidence.title':'Resultados que<br>você pode examinar.',
-    'evidence.body':'Épocas alinhadas. Comparações por paciente. Métricas diferentes, apresentadas separadamente.',
-    'stats.cases':'casos adicionais avaliados na V8', 'stats.epochs':'observações época × domínio', 'stats.domains':'domínios farmacológicos',
-    'tabs.within':'AUC por caso · V8', 'tabs.global':'AUC global · V8', 'tabs.memory':'Controle de memória · V7',
-    'evidence.download':'Baixar dados ↓', 'evidence.table':'Resultados TCR e BIS por domínio',
-    'table.domain':'Domínio', 'table.cases':'Casos', 'table.hint':'Selecione um domínio para examinar a comparação.',
-    'detail.delta':'Diferença de AUC',
-    'evidence.note':'A V8 usa o modelo Legacy V7 congelado em casos adicionais da mesma fonte VitalDB. O alvo é exposição farmacológica alta versus baixa dentro do caso. São resultados retrospectivos de pesquisa.',
-    'method.title':'Leia o protocolo de avaliação <span>+</span>',
-    'method.1':'Comparação alinhada',
-    'method.1b':'TCR e BIS são comparados nas mesmas épocas selecionadas. Na V8, o BIS observado é orientado como 100 − BIS. As contagens por domínio se sobrepõem e não devem ser somadas como pacientes únicos.',
-    'method.2':'Duas visões da AUC',
-    'method.2b':'A AUC global reúne épocas de diferentes casos. A AUC por caso avalia a discriminação separadamente em cada caso e atribui o mesmo peso a cada um.',
-    'method.3':'Features causais, rótulos retrospectivos',
-    'method.3b':'O histórico é construído em ordem cronológica. A inferência não recebe dose, BIS ou rótulos. Os rótulos alto/baixo usam a distribuição de exposição do caso completo (q25/q75).',
-    'method.4':'Escopo das conclusões',
-    'method.4b':'Os intervalos de confiança reamostram pacientes. O desenvolvimento exploratório anterior e as múltiplas comparações não estão incluídos nesses intervalos. Validação prospectiva e em fontes independentes são próximas etapas.',
-    'engineering.label':'03 / REPRODUTIBILIDADE POR PROJETO', 'engineering.note':'Uma referência de pesquisa para a próxima etapa',
-    'engineering.title':'Preservar a ciência.<br>Avançar a experiência.',
-    'engineering.body':'O replay Legacy V7 reproduz os escores salvos, mantendo os modelos fixos e o histórico do sinal explícito.',
-    'parity.cases':'casos na auditoria de paridade V7', 'parity.epochs':'épocas comparadas',
-    'parity.error':'Maior diferença no escore bruto', 'parity.note':'Paridade de replay de predições. A verificação completa do sinal bruto até o monitor é uma etapa separada.',
-    'release.title':'Congelado em uso. Versionado na pesquisa.',
-    'release.body':'Legacy multiscale V7 é a referência atual. CaseAdaptive permanece um ramo exploratório após a comparação corrigida. Atualizações futuras são avaliadas como versões distintas do modelo.',
-    'collab.label':'04 / A PRÓXIMA CONVERSA', 'collab.title':'Construir a próxima<br>perspectiva. Juntos.',
-    'collab.body':'Para equipes de pesquisa e parceiros de neurotecnologia que exploram interpretação de sinais, processamento local e integração.',
-    'collab.cta':'Comece uma conversa ↗', 'collab.1':'Avaliação científica', 'collab.1b':'Datasets independentes, protocolos fixos e reprodutibilidade.',
-    'collab.2':'Exploração de integração', 'collab.2b':'Perfis de EEG/ECG, execução local e uma apresentação complementar.',
-    'collab.3':'Colaboração OEM', 'collab.3b':'Uma via de avaliação para codesenvolvimento e licenciamento.',
-    'collab.footer':'Pacote atual: replay de pesquisa · Conceitos de implantação: local / embarcado / on-premises',
-    'footer.copy':'Pesquisa independente · Samuel Santos Oliveira da Silva<br>Evidências: Legacy V7 / V8 · Documentação revisada em setembro–outubro de 2026',
-    'footer.data':'Dados das evidências ↗', 'footer.photo':'Paisagem: Luca Micheli / Unsplash · Imagem fornecida pelo pesquisador'
-  };
-  let language = 'en';
-  try { language = localStorage.getItem('psisense-language') === 'pt' ? 'pt' : 'en'; } catch (_) {}
-  let evidence = null, metric = 'within', domain = 'propofol_ce';
-  const names = {des_exp:'Desflurane', propofol_ce:'Propofol', remi20_ce:'Remifentanil · 20', remi50_ce:'Remifentanil · 50', sevo_exp:'Sevoflurane'};
-  const namesPT = {...names, des_exp:'Desflurano', sevo_exp:'Sevoflurano'};
-  const t = (english, portuguese) => language === 'pt' ? portuguese : english;
-  const number = (x, digits = 4) => x.toLocaleString(language === 'pt' ? 'pt-BR' : 'en-US', {minimumFractionDigits:digits, maximumFractionDigits:digits});
-  const signed = x => (x > 0 ? '+' : '') + number(x);
-  function setLanguage(next) {
-    language = next;
-    document.documentElement.lang = next === 'pt' ? 'pt-BR' : 'en';
-    nodes.forEach(n => { n.innerHTML = next === 'pt' ? (pt[n.dataset.i18n] || en[n.dataset.i18n]) : en[n.dataset.i18n]; });
-    $('language').innerHTML = (next === 'pt' ? 'EN' : 'PT') + ' <span aria-hidden="true">↔</span>';
-    $('language').setAttribute('aria-label', t('Switch to Portuguese','Mudar para inglês'));
-    $('menu-toggle').setAttribute('aria-label', t('Open navigation','Abrir navegação'));
-    $('memory-chart').setAttribute('aria-label',t('Synthetic signal and causal history','Sinal sintético e histórico causal'));
-    $('epoch-slider').setAttribute('aria-valuetext', $('demo-time').textContent);
-    try { localStorage.setItem('psisense-language', next); } catch (_) {}
-    renderBenchmark(); updatePlayLabel();
+  const $ = id => document.getElementById(id), $$ = s => Array.from(document.querySelectorAll(s));
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const langNodes=$$('[data-en]');langNodes.forEach(n=>n.dataset.pt=n.innerHTML);
+  let lang='pt',study='primary',selectedMethod='TCR_HYBRID',view='signals',playing=true,labVisible=false,heroVisible=true;
+  const t=(pt,en)=>lang==='pt'?pt:en;
+  const fmt=(x,n=4)=>Number.isFinite(x)?x.toFixed(n).replace('.',lang==='pt'?',':'.'):'—';
+  const clock=s=>{const h=Math.floor(s/3600),m=Math.floor(s/60)%60,sec=Math.floor(s)%60;return(h?String(h).padStart(2,'0')+':':'')+String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0');};
+  const evidence=window.LUNA_EVIDENCE,engine=new window.LunaSynthetic.Engine();
+  engine.mark('start','');engine.advance(32);
+  let reading=engine.analyze(),lastFrame=0,lastPaint=0,lastAnalyze=0,lastEventCount=-1,toastTimer;
+  const names={TCR_HYBRID:['TCR-RI16 híbrida','Hybrid TCR-RI16'],TCR_ORI:['ORI aprendida','Learned ORI'],TCR_DRI:['DRI','DRI'],WSMF_RAW:['WSMF causal','Causal WSMF'],pEEG10_RF:['pEEG10 · retrospectivo','pEEG10 · retrospective'],TCR10_RF:['TCR10 + RF · controle','TCR10 + RF · control'],ORI_FIXED:['ORI fixa · resultado negativo','Fixed ORI · negative result']};
+  const domains={des_exp:'Desflurano',propofol_ce:'Propofol',remi20_ce:'Remifentanil / RFTN20',remi50_ce:'Remifentanil / RFTN50',sevo_exp:'Sevoflurano'};
+  const qualityText={usable:['Utilizável','Usable'],warming:['Preparando sinal','Warming up'],disconnected:['Eletrodo desconectado','Electrode disconnected'],clipped:['Sinal saturado','Signal clipped'],motion:['Artefato de movimento','Motion artifact'],interference:['Interferência elétrica','Electrical interference']};
+  const labelName=k=>names[k]?.[lang==='pt'?0:1]||k;
+  const text=(id,value)=>{$(id).textContent=value;};
+  function toast(msg){text('toast',msg);$('toast').hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').hidden=true,3500);}
+  function saveJSON(value,name){const blob=new Blob([JSON.stringify(value,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+  function bindTabs(selector,onSelect){
+    const tabs=$$(selector);
+    tabs.forEach((b,i)=>{b.addEventListener('click',()=>onSelect(b));b.addEventListener('keydown',e=>{let j;if(e.key==='ArrowRight')j=(i+1)%tabs.length;else if(e.key==='ArrowLeft')j=(i+tabs.length-1)%tabs.length;else if(e.key==='Home')j=0;else if(e.key==='End')j=tabs.length-1;else return;e.preventDefault();tabs[j].focus();onSelect(tabs[j]);});});
   }
-  $('language').addEventListener('click', () => setLanguage(language === 'en' ? 'pt' : 'en'));
-  function closeMenu() { $('mobile-menu').hidden = true; $('menu-toggle').setAttribute('aria-expanded','false'); }
-  $('menu-toggle').addEventListener('click', () => { const open = $('mobile-menu').hidden; $('mobile-menu').hidden = !open; $('menu-toggle').setAttribute('aria-expanded', String(open)); });
-  $('mobile-menu').querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
-  const onScroll = () => $('header').classList.toggle('scrolled', window.scrollY > 40);
-  window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
-
-  function interpretation(row) {
-    if (row.domain === 'remi50_ce') return t('Small cohort. Results vary by metric; an independent, larger evaluation is needed.', 'Coorte pequena. Os resultados variam por métrica; é necessária uma avaliação independente maior.');
-    if (metric === 'memory' && row.domain === 'des_exp') return t('Positive point estimate, but the confidence interval includes zero. The memory comparator is a research control.', 'Estimativa pontual positiva, mas o intervalo inclui zero. O comparador com memória é um controle de pesquisa.');
-    if (metric === 'within' && row.domain === 'des_exp') return t('Observed BIS has the higher mean within-case AUC here. The direction differs from global AUC.', 'O BIS observado tem maior AUC média por caso neste domínio. A direção é diferente da AUC global.');
-    if (metric === 'global' && row.domain === 'des_exp') return t('TCR has the higher pooled AUC here; observed BIS has the higher within-case AUC. Both views matter.', 'A TCR tem maior AUC global aqui; o BIS observado tem maior AUC por caso. As duas visões importam.');
-    return metric === 'memory' ? t('Higher TCR AUC under this matched protocol, compared with a BIS-based causal-memory research model.', 'Maior AUC da TCR neste protocolo alinhado, frente a um modelo de pesquisa com memória causal baseada no BIS.') : t('Higher TCR AUC under this matched protocol. This result concerns within-case pharmacological exposure.', 'Maior AUC da TCR neste protocolo alinhado. O resultado se refere à exposição farmacológica dentro do caso.');
+  function switchLanguage(){
+    lang=lang==='pt'?'en':'pt';document.documentElement.lang=lang==='pt'?'pt-BR':'en';
+    langNodes.forEach(n=>n.innerHTML=n.dataset[lang]);
+    $('language').textContent=lang==='pt'?'EN ↔':'PT ↔';$('language').ariaLabel=t('Switch to English','Mudar para português');
+    $('annotation').placeholder=t('Sua observação…','Your observation…');
+    $('menu-toggle').ariaLabel=t('Abrir navegação','Open navigation');
+    $('navigation').ariaLabel=t('Navegação principal','Main navigation');
+    document.title=t('PsiSense Luna · O sinal tem uma história','PsiSense Luna · The signal has a history');
+    renderEvidence();updateReadings();renderEvents();updateScroll();updatePlay();renderLab();
   }
-  function renderBenchmark() {
-    if (!evidence) return;
-    const m = evidence.metrics[metric];
-    const descriptions = {
-      within:t('Mean within-case AUC: each case is evaluated separately and receives equal weight.','AUC média por caso: cada caso é avaliado separadamente e recebe o mesmo peso.'),
-      global:t('Global AUC: matched epochs are pooled across cases.','AUC global: as épocas alinhadas são reunidas entre casos.'),
-      memory:t('Global AUC against a BIS-based model with causal history and state, under the V7 protocol. This is a research comparator.','AUC global frente a um modelo baseado no BIS com histórico causal e estado, no protocolo V7. É um comparador de pesquisa.')
-    };
-    $('metric-description').textContent = descriptions[metric];
-    $('cohort-badge').textContent = metric === 'memory' ? 'Legacy V7 · '+t('matched control','controle alinhado') : 'V8 · '+t('additional cases','casos adicionais');
-    $('comparator-header').textContent = metric === 'memory' ? 'BIS + M' : 'BIS';
-    $('benchmark-panel').setAttribute('aria-labelledby','tab-'+metric);
-    $('results-table').replaceChildren();
-    m.rows.forEach(row => {
-      const tr = document.createElement('tr'); tr.classList.toggle('selected',row.domain === domain);
-      const th = document.createElement('th'); th.scope='row';
-      const button = document.createElement('button'); button.textContent = (language === 'pt' ? namesPT : names)[row.domain];
-      button.setAttribute('aria-pressed', String(row.domain === domain)); button.addEventListener('click', () => {domain=row.domain; renderBenchmark();});
-      th.append(button); tr.append(th);
-      [number(row.cases,0), number(row.tcr), number(row.bis), signed(row.delta)].forEach((value,i) => {const td=document.createElement('td'); td.textContent=value; if(i===3)td.className=row.delta>0?'positive':'negative'; tr.append(td);});
-      $('results-table').append(tr);
-    });
-    const row = m.rows.find(r=>r.domain===domain);
-    $('selected-domain').textContent = (language==='pt'?namesPT:names)[domain];
-    $('domain-count').textContent = number(row.cases,0)+' '+t('cases','casos');
-    $('tcr-value').textContent = number(row.tcr); $('bis-value').textContent = number(row.bis);
-    $('bar-tcr').style.width = row.tcr*100+'%'; $('bar-bis').style.width = row.bis*100+'%';
-    $('bis-label').textContent = metric==='memory' ? t('BIS + memory + state','BIS + memória + estado') : t('Observed BIS','BIS observado');
-    $('delta-value').textContent = signed(row.delta);
-    $('delta-ci').textContent = t('95% CI','IC95%')+' ['+number(row.ci[0])+'; '+number(row.ci[1])+']';
-    $('interpretation').textContent = interpretation(row);
+  $('language').addEventListener('click',switchLanguage);
+  $('menu-toggle').addEventListener('click',()=>{const open=$('navigation').classList.toggle('open');$('menu-toggle').setAttribute('aria-expanded',String(open));});
+  $$('#navigation a').forEach(a=>a.addEventListener('click',()=>{$('navigation').classList.remove('open');$('menu-toggle').setAttribute('aria-expanded','false');}));
+  function renderEvidence(){
+    const legacy=['within','global','memory'].includes(study),section=legacy?evidence.legacy.metrics[study]:evidence[study];
+    const rows=legacy?section.rows.map(r=>({...r,key:r.domain})):Object.entries(section.metrics).map(([key,v])=>({key,...v}));
+    if(!rows.some(r=>r.key===selectedMethod))selectedMethod=rows[0].key;
+    text('method-heading',legacy?t('Domínio','Domain'):t('Método','Method'));
+    text('interval-heading',legacy?t('Δ AUC · IC95%','Δ AUC · 95% CI'):t('AUC · IC95%','AUC · 95% CI'));
+    text('study-title',legacy?(study==='within'?t('VitalDB / média das AUCs dentro de cada caso','VitalDB / mean of within-case AUCs'):study==='global'?t('VitalDB / AUC agrupando épocas pareadas','VitalDB / pooled matched-epoch AUC'):t('VitalDB / controle BIS com memória causal','VitalDB / BIS causal-memory control')):study==='primary'?t('DOSE-I / extremos MOAA/S · teste principal','DOSE-I / MOAA/S extremes · primary test'):t('DOSE-I / cobertura posterior · mesmos registros','DOSE-I / post-hoc coverage · same recordings'));
+    text('study-size',legacy?(study==='memory'?t('V7 · comparação de pesquisa','V7 · research comparison'):t('V8 · 1.326 casos adicionais · 5 domínios','V8 · 1,326 additional cases · 5 domains')):section.n+' '+t('avaliações','assessments')+' / '+section.recordings+' '+t('registros','recordings'));
+    const body=$('results-body');body.replaceChildren();
+    for(const r of rows){const tr=document.createElement('tr');tr.className=r.key===selectedMethod?'selected':'';const name=legacy?(lang==='en'?domains[r.key].replace('Desflurano','Desflurane').replace('Sevoflurano','Sevoflurane').replace('Remifentanil','Remifentanil'):domains[r.key]):labelName(r.key);const ci=legacy?r.ci:r.auc_ci95_cluster;
+      for(const v of [name,fmt(legacy?r.tcr:r.auc),legacy?((r.delta>=0?'+':'')+fmt(r.delta,4)+' ['+fmt(ci[0],3)+'; '+fmt(ci[1],3)+']'):fmt(ci[0],4)+'–'+fmt(ci[1],4)]){let td=document.createElement('td');td.textContent=v;tr.append(td);}
+      const td=document.createElement('td'),b=document.createElement('button');b.textContent='↗';b.setAttribute('aria-label',t('Inspecionar ','Inspect ')+name);b.setAttribute('aria-pressed',String(r.key===selectedMethod));b.addEventListener('click',()=>{selectedMethod=r.key;renderEvidence();});td.append(b);tr.append(td);body.append(tr);
+    }
+    const r=rows.find(x=>x.key===selectedMethod);text('focus-name',legacy?domains[r.key]:labelName(r.key));text('focus-auc',fmt(legacy?r.tcr:r.auc));
+    if(legacy){text('focus-context',r.cases+' '+t('casos / ','cases / ')+r.epochs.toLocaleString(lang==='pt'?'pt-BR':'en-US')+' '+t('épocas pareadas. BIS: ','matched epochs. BIS: ')+fmt(r.bis)+'.');
+      text('focus-delta',(r.delta>=0?'+':'')+fmt(r.delta)+' Δ AUC / '+(study==='memory'?t('BIS com memória','BIS with memory'):t('BIS observado','observed BIS')));
+      text('focus-interpretation',r.ci[0]>0?t('Intervalo da diferença acima de zero neste domínio e nesta análise.','Difference interval above zero for this domain and analysis.'):r.ci[1]<0?t('Intervalo abaixo de zero: o comparador teve AUC maior nesta análise.','Interval below zero: the comparator had higher AUC in this analysis.'):t('O intervalo inclui zero; vantagem não estabelecida nesta análise.','The interval includes zero; an advantage is not established in this analysis.'));
+      intervalChart(r.delta,r.ci,true);
+    }else{
+      const ci=r.auc_ci95_cluster;text('focus-context',t('AUC de discriminação · IC95% por registro: ','Discrimination AUC · recording-level 95% CI: ')+fmt(ci[0])+'–'+fmt(ci[1])+'.');intervalChart(r.auc,ci,false);
+      if(r.key==='TCR_HYBRID'){const d=study==='primary'?section.paired_deltas.TCR_HYBRID_minus_WSMF_RAW:section.hybrid_minus_wsmf_raw;text('focus-delta','+'+fmt(d.delta)+' Δ AUC / WSMF '+t('causal','causal'));text('focus-interpretation',t('IC95% da diferença: ','95% CI of the difference: ')+fmt(d.ci95[0])+'–'+fmt(d.ci95[1])+'. '+t('Superioridade não estabelecida.','Superiority not established.'));}
+      else if(r.key==='ORI_FIXED'){text('focus-delta',t('Resultado negativo preservado','Negative result preserved'));text('focus-interpretation',t('A formulação fixa foi rejeitada. A RI16 híbrida selecionada é uma candidata distinta.','The fixed formulation was rejected. The selected hybrid RI16 is a separate candidate.'));}
+      else{text('focus-delta',r.brier!=null?'Brier '+fmt(r.brier,5):t('Comparador direto','Direct comparator'));text('focus-interpretation',r.key==='pEEG10_RF'?t('Referência retrospectiva; não é um controle causal equivalente.','Retrospective reference; not an equivalent causal control.'):r.key==='TCR10_RF'?t('Controle TCR10 + RF deste experimento. Não é o Legacy V7 congelado.','TCR10 + RF control from this experiment. It is not the frozen Legacy V7.'):t('Mesmo conjunto de avaliações do estudo selecionado. AUC não equivale a percentual de acertos.','The same assessments from the selected study. AUC is not an accuracy percentage.'));}
+    }
+    text('study-note',legacy?t('Alvo: faixas retrospectivas de exposição farmacológica. Contagens por domínio se sobrepõem. AUC global e intracasos têm interpretações diferentes. A avaliação permanece exploratória.','Target: retrospective pharmacological exposure ranges. Domain counts overlap. Global and within-case AUC have different interpretations. Evaluation remains exploratory.'):study==='primary'?t('Análise principal: janela passada de 16 s. A DOSE-I já havia sido explorada; este teste por registro não é confirmação externa inédita. MOAA/S mede responsividade observada, não experiência consciente.','Primary analysis: a 16-second past window. DOSE-I had already been explored; this recording holdout is not new external confirmation. MOAA/S measures observed responsiveness, not conscious experience.'):t('Análise posterior de cobertura, sem novo treino: 57 avaliações adicionais nos mesmos 43 registros. Não substitui a análise principal nem representa uma nova coorte independente.','Post-hoc coverage analysis, without retraining: 57 additional assessments in the same 43 recordings. It does not replace the primary analysis or constitute a new independent cohort.'));
   }
-  const tabs = Array.from(document.querySelectorAll('[data-metric]'));
-  function chooseTab(tab, focus=false) { metric=tab.dataset.metric; tabs.forEach(b=>{b.setAttribute('aria-selected',String(b===tab));b.tabIndex=b===tab?0:-1;}); if(focus)tab.focus(); renderBenchmark(); }
-  tabs.forEach(tab=>{tab.addEventListener('click',()=>chooseTab(tab)); tab.addEventListener('keydown',e=>{let i=tabs.indexOf(tab); if(e.key==='ArrowRight')i=(i+1)%tabs.length;else if(e.key==='ArrowLeft')i=(i+tabs.length-1)%tabs.length;else if(e.key==='Home')i=0;else if(e.key==='End')i=tabs.length-1;else return;e.preventDefault();chooseTab(tabs[i],true);});});
-  $('download-data').addEventListener('click',()=>{
-    if(!evidence)return;
-    const lines=['version,metric,domain,cases,epochs,tcr_auc,bis_auc,delta_auc,ci95_low,ci95_high'];
-    evidence.metrics[metric].rows.forEach(r=>lines.push([evidence.metrics[metric].version,metric,r.domain,r.cases,r.epochs,r.tcr,r.bis,r.delta,...r.ci].join(',')));
-    const url=URL.createObjectURL(new Blob([lines.join('\n')+'\n'],{type:'text/csv;charset=utf-8'}));
-    const a=document.createElement('a');a.href=url;a.download='PsiSense_'+evidence.metrics[metric].version+'_'+metric+'.csv';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
-  });
-
-  // Concept illustration only. No patient data or model inference in this demo.
-  const samples=Array.from({length:241},(_,i)=>0.52+0.14*Math.sin(i*0.077)+0.075*Math.sin(i*0.40)+0.035*Math.cos(i*0.86)+0.09*Math.tanh((i-118)/30));
-  const xy=(i,v)=>[20+i/240*620,198-v*168];
-  const path=(points)=>points.map((p,i)=>(i?'L':'M')+p.map(v=>v.toFixed(2)).join(',')).join(' ');
-  const svgNS='http://www.w3.org/2000/svg';
-  [40,80,120,160,200].forEach(y=>{const line=document.createElementNS(svgNS,'line');line.setAttribute('x1','20');line.setAttribute('x2','640');line.setAttribute('y1',y);line.setAttribute('y2',y);line.setAttribute('stroke','#e2e1e9');$('chart-grid').append(line);});
-  function renderDemo() {
-    const epoch=Number($('epoch-slider').value), index=epoch*10, x=xy(index,0)[0], start=Math.max(0,index-80);
-    $('signal-past').setAttribute('d',path(samples.slice(0,index+1).map((v,i)=>xy(i,v))));
-    $('signal-future').setAttribute('d',path(samples.slice(index).map((v,i)=>xy(index+i,v))));
-    const means=[];
-    for(let i=1;i<=index;i++){const earlier=samples.slice(Math.max(0,i-80),i);means.push(xy(i,earlier.reduce((a,b)=>a+b,0)/earlier.length));}
-    $('history-mean').setAttribute('d',path(means));
-    $('past-window').setAttribute('x',xy(start,0)[0]);$('past-window').setAttribute('width',x-xy(start,0)[0]);
-    $('moment-line').setAttribute('x1',x);$('moment-line').setAttribute('x2',x);
-    $('moment-dot').setAttribute('cx',x);$('moment-dot').setAttribute('cy',xy(index,samples[index])[1]);
-    const seconds=epoch*30; const time=String(Math.floor(seconds/60)).padStart(2,'0')+':'+String(seconds%60).padStart(2,'0');
-    $('demo-time').textContent=time;$('epoch-slider').setAttribute('aria-valuetext',time);
+  function intervalChart(value,ci,delta){const svg=$('interval-chart'),ns='http://www.w3.org/2000/svg';svg.replaceChildren();const lo=delta?-.2:.5,hi=delta?.4:1,x=v=>30+(v-lo)/(hi-lo)*340;const add=(tag,attrs,txt)=>{let el=document.createElementNS(ns,tag);for(const [k,v]of Object.entries(attrs))el.setAttribute(k,v);if(txt)el.textContent=txt;svg.append(el);};
+    svg.setAttribute('aria-label',(delta?'Δ AUC':'AUC')+' '+fmt(value)+', '+t('intervalo de confiança ','confidence interval ')+fmt(ci[0])+'–'+fmt(ci[1]));add('line',{x1:30,x2:370,y1:61,y2:61,stroke:'#b3beb5','stroke-width':1});
+    for(const v of (delta?[-.2,0,.2,.4]:[.5,.75,1])){add('line',{x1:x(v),x2:x(v),y1:52,y2:71,stroke:'#96aaa0','stroke-width':1});add('text',{x:x(v),y:94,'text-anchor':'middle',fill:'#5a7068','font-size':10},fmt(v,2));}
+    add('line',{x1:x(ci[0]),x2:x(ci[1]),y1:42,y2:42,stroke:'#5e8d77','stroke-width':4});for(const v of ci)add('line',{x1:x(v),x2:x(v),y1:34,y2:50,stroke:'#5e8d77','stroke-width':2});add('circle',{cx:x(value),cy:42,r:6,fill:'#2e5b4d',stroke:'#edece6','stroke-width':2});add('text',{x:30,y:13,fill:'#5a7068','font-size':9},delta?t('INTERVALO DA DIFERENÇA','DIFFERENCE INTERVAL'):t('AUC E INTERVALO DE CONFIANÇA','AUC AND CONFIDENCE INTERVAL'));
   }
-  let playTimer=null;
-  function updatePlayLabel(){ $('play-text').textContent=playTimer?t('Pause','Pausar'):t('Play','Reproduzir');$('play-icon').textContent=playTimer?'Ⅱ':'▶';$('demo-play').setAttribute('aria-pressed',String(Boolean(playTimer)));$('demo-play').setAttribute('aria-label',playTimer?t('Pause illustration','Pausar ilustração'):t('Play illustration','Reproduzir ilustração'));}
-  function pauseDemo(){ if(playTimer)clearInterval(playTimer);playTimer=null;updatePlayLabel(); }
-  $('demo-play').addEventListener('click',()=>{if(playTimer){pauseDemo();return;}if(Number($('epoch-slider').value)>=24)$('epoch-slider').value=1;playTimer=setInterval(()=>{const value=Number($('epoch-slider').value);if(value>=24){pauseDemo();return;}$('epoch-slider').value=value+1;renderDemo();},650);updatePlayLabel();renderDemo();});
-  $('epoch-slider').addEventListener('input',()=>{pauseDemo();renderDemo();});
-  document.addEventListener('visibilitychange',()=>{if(document.hidden)pauseDemo();});
-  renderDemo();
-
-  // Decorative sphere, not a representation of measured brain connectivity.
-  function project(lat,lon) {
-    const a=lon+.45,x=Math.cos(lat)*Math.sin(a),y=Math.sin(lat),z=Math.cos(lat)*Math.cos(a);
-    const tilt=.32,py=y*Math.cos(tilt)-z*Math.sin(tilt),pz=y*Math.sin(tilt)+z*Math.cos(tilt);
-    return {x:240+x*178,y:240+py*178,z:pz};
+  bindTabs('[data-study]',b=>{study=b.dataset.study;selectedMethod=['primary','coverage'].includes(study)?'TCR_HYBRID':'propofol_ce';$$('[data-study]').forEach(el=>{el.setAttribute('aria-selected',String(el===b));el.tabIndex=el===b?0:-1;});$('study-panel').setAttribute('aria-labelledby',b.id);renderEvidence();});
+  bindTabs('[data-view]',b=>{view=b.dataset.view;$$('[data-view]').forEach(el=>{const selected=el===b;el.setAttribute('aria-selected',String(selected));el.tabIndex=selected?0:-1;$('lab-'+el.dataset.view).hidden=!selected;});renderLab();});
+  function updatePlay(){text('lab-play',playing?t('Ⅱ Pausar','Ⅱ Pause'):t('▶ Retomar','▶ Resume'));$('lab-play').setAttribute('aria-pressed',String(playing));text('runtime-state',!playing?t('Sessão pausada','Session paused'):labVisible?t('Gerador sintético ativo · 128 Hz','Synthetic generator active · 128 Hz'):t('Pronto · execução suspensa fora da tela','Ready · execution suspended offscreen'));}
+  $('lab-play').addEventListener('click',()=>{playing=!playing;engine.mark(playing?'resume':'pause','');updatePlay();renderEvents();});
+  $('enter-lab').addEventListener('click',()=>{playing=true;labVisible=true;updatePlay();$('lab-shell').scrollIntoView({behavior:reduced?'auto':'smooth',block:'start'});$('scenario').focus({preventScroll:true});});
+  $('lab-reset').addEventListener('click',()=>{engine.reset();engine.mark('start','');engine.advance(32);reading=engine.analyze();syncControls();lastEventCount=-1;updateReadings();renderLab();toast(t('Sessão reiniciada com 32 s de pré-carga sintética.','Session reset with a 32-second synthetic preload.'));});
+  function syncControls(){for(const [id,value]of [['scenario',engine.preset],['slow-mix',Math.round(engine.slow*100)],['amplitude',engine.amplitude],['noise',Math.round(engine.noise*100)],['artifact',engine.artifact]])$(id).value=value;updateControlLabels();}
+  function updateControlLabels(){text('slow-output',$('slow-mix').value+'%');text('amplitude-output',$('amplitude').value+' µV');text('noise-output',$('noise').value+'%');}
+  $('scenario').addEventListener('change',()=>{engine.setPreset($('scenario').value);syncControls();renderEvents();});
+  for(const [id,key,factor]of [['slow-mix','slow',.01],['amplitude','amplitude',1],['noise','noise',.01]]){$(id).addEventListener('input',()=>{engine[key]=Number($(id).value)*factor;updateControlLabels();});$(id).addEventListener('change',()=>{engine.mark('control',id+': '+$(id).value);renderEvents();});}
+  $('artifact').addEventListener('change',()=>{engine.artifact=$('artifact').value;engine.mark('artifact',engine.artifact);renderEvents();});
+  $('mark-event').addEventListener('click',()=>{engine.mark('manual','');renderEvents();toast(t('Marcação adicionada em ','Marker added at ')+clock(engine.time));});
+  $('annotation-form').addEventListener('submit',e=>{e.preventDefault();const note=$('annotation').value.trim();if(!note)return;engine.mark('note',note);$('annotation').value='';renderEvents();toast(t('Observação registrada.','Note recorded.'));});
+  $('export-session').addEventListener('click',()=>{saveJSON(engine.export(),'PsiSense_Luna_Sessao_Sintetica.json');toast(t('Sessão sintética exportada.','Synthetic session exported.'));});
+  async function fullscreen(){const shell=$('lab-shell');if(document.fullscreenElement){await document.exitFullscreen();return;}if(shell.classList.contains('expanded')){shell.classList.remove('expanded');document.body.style.overflow='';updateFullscreen();return;}if(shell.requestFullscreen){try{await shell.requestFullscreen();return;}catch{}}shell.classList.add('expanded');document.body.style.overflow='hidden';labVisible=true;updateFullscreen();renderLab();}
+  function updateFullscreen(){const active=!!document.fullscreenElement||$('lab-shell').classList.contains('expanded');text('lab-fullscreen',active?t('⤡ Reduzir','⤡ Collapse'):t('⤢ Ampliar','⤢ Expand'));updatePlay();}
+  $('lab-fullscreen').addEventListener('click',fullscreen);document.addEventListener('fullscreenchange',()=>{updateFullscreen();renderLab();});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('lab-shell').classList.contains('expanded'))fullscreen();});
+  function updateReadings(){
+    text('lab-clock',clock(engine.time));text('demo16',reading.demo16==null?'—':fmt(reading.demo16,1));text('demo30',reading.demo30==null?'—':fmt(reading.demo30,1));text('quality-label',qualityText[reading.quality]?.[lang==='pt'?0:1]||'—');document.querySelector('.quality-box').classList.toggle('invalid',!reading.valid);
+    text('quality-explanation',reading.valid?(reading.lowAmplitude?t('Baixa amplitude sintética. Sem interpretação clínica.','Synthetic low amplitude. No clinical interpretation.'):t('Sinal sintético disponível. As janelas ainda precisam conter dados utilizáveis.','Synthetic signal available. Past windows must also contain usable data.')):t('Leituras didáticas suspensas. Retire o artefato e aguarde a renovação das janelas.','Educational readings suspended. Remove the artifact and wait for the windows to refresh.'));
+    text('engine16-status',reading.demo16==null?t('Sem janela contínua utilizável.','No usable continuous window.'):t('2.048 amostras passadas · saída didática.','2,048 past samples · educational output.'));
+    text('engine30-status',reading.demo30==null?t('Sem janela contínua utilizável.','No usable continuous window.'):t('3.840 amostras passadas + contexto anterior.','3,840 past samples + earlier context.'));
+    if(view==='spectrum'){const container=$('band-readings');container.replaceChildren();['δ / 0.5–4','θ / 4–8','α / 8–13','β / 13–30','30–50 Hz'].forEach((label,i)=>{const d=document.createElement('div'),b=document.createElement('strong');d.textContent=label;b.textContent=reading.valid?fmt(reading.bands[i]*100,1)+'%':'—';d.append(b);container.append(d);});}
+    if(engine.events.length!==lastEventCount)renderEvents();
   }
-  function meshLine(points){const p=document.createElementNS(svgNS,'path');p.setAttribute('d',path(points.map(p=>[p.x,p.y])));p.setAttribute('fill','none');p.setAttribute('stroke','#e4dcff');p.setAttribute('stroke-width','.65');p.setAttribute('opacity','.32');$('neural-mesh').append(p);}
-  for(let lat=-1.35;lat<=1.35;lat+=.225){meshLine(Array.from({length:121},(_,i)=>project(lat,i*Math.PI/60)));}
-  for(let lon=0;lon<Math.PI*2;lon+=Math.PI/12){meshLine(Array.from({length:81},(_,i)=>project(-Math.PI/2+i*Math.PI/80,lon)));}
-  let seed=27;function random(){seed=(seed*16807)%2147483647;return(seed-1)/2147483646;}
-  for(let i=0;i<90;i++){const p=project(Math.asin(random()*2-1),random()*Math.PI*2);if(p.z<-.1)continue;const c=document.createElementNS(svgNS,'circle');c.setAttribute('cx',p.x);c.setAttribute('cy',p.y);c.setAttribute('r',i%8===0?'3':'1.6');c.setAttribute('fill','#f3ecff');c.setAttribute('opacity',String(.45+(p.z+1)*.2));$('neural-nodes').append(c);}
-  const motion=window.matchMedia('(prefers-reduced-motion: reduce)');
-  if(window.matchMedia('(hover: hover) and (pointer: fine)').matches&&!motion.matches){const hero=document.querySelector('.hero');let frame=0;hero.addEventListener('pointermove',e=>{if(frame)cancelAnimationFrame(frame);frame=requestAnimationFrame(()=>{const rect=hero.getBoundingClientRect();hero.style.setProperty('--mouse-x',String((e.clientX-rect.left)/rect.width-.5));hero.style.setProperty('--mouse-y',String((e.clientY-rect.top)/rect.height-.5));});});hero.addEventListener('pointerleave',()=>{if(frame)cancelAnimationFrame(frame);hero.style.setProperty('--mouse-x','0');hero.style.setProperty('--mouse-y','0');});}
-  setLanguage(language);
-  fetch('assets/evidence.json').then(r=>{if(!r.ok)throw new Error('Evidence unavailable');return r.json();}).then(data=>{evidence=data;renderBenchmark();}).catch(()=>{$('metric-description').textContent=t('Evidence could not load. Please reload, or download the evidence dataset below.','Não foi possível carregar as evidências. Recarregue a página ou baixe o arquivo de dados abaixo.');$('download-data').disabled=true;});
+  function eventLabel(e){if(e.kind==='note')return e.text;const labels={start:t('Sessão sintética · pré-carga de 32 s','Synthetic session · 32-second preload'),pause:t('Sessão pausada','Session paused'),resume:t('Sessão retomada','Session resumed'),manual:t('Marcação manual','Manual marker')};if(labels[e.kind])return labels[e.kind];if(e.kind==='preset'){const option=$('scenario').querySelector('option[value="'+e.text+'"]');return t('Cenário: ','Scenario: ')+(option?.textContent||e.text);}if(e.kind==='artifact'){const option=$('artifact').querySelector('option[value="'+e.text+'"]');return t('Artefato: ','Artifact: ')+(option?.textContent||e.text);}return t('Controle ajustado: ','Control adjusted: ')+e.text;}
+  function renderEvents(){const list=$('event-list');list.replaceChildren();for(const e of engine.events.slice().reverse()){const li=document.createElement('li'),time=document.createElement('time'),s=document.createElement('span');time.textContent=clock(e.time);s.textContent=eventLabel(e);li.append(time,s);list.append(li);}lastEventCount=engine.events.length;}
+  function canvas(id){const el=$(id);const rect=el.getBoundingClientRect();if(!rect.width||!rect.height)return null;const dpr=Math.min(2,window.devicePixelRatio||1),w=rect.width,h=rect.height;if(el.width!==Math.round(w*dpr)||el.height!==Math.round(h*dpr)){el.width=Math.round(w*dpr);el.height=Math.round(h*dpr);}const ctx=el.getContext('2d');if(!ctx)return null;ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);return {ctx,w,h};}
+  function grid(ctx,w,h,rows=4){ctx.lineWidth=1;ctx.strokeStyle='#6c94a119';ctx.beginPath();for(let x=0;x<w;x+=w/12){ctx.moveTo(x,0);ctx.lineTo(x,h);}for(let j=1;j<rows;j++){ctx.moveTo(0,h*j/rows);ctx.lineTo(w,h*j/rows);}ctx.stroke();}
+  function waveChart(){const c=canvas('eeg-chart');if(!c)return;const{ctx,w,h}=c;grid(ctx,w,h,3);const span=Number($('time-window').value),gain=Number($('gain').value),colors=['#acecdb','#bab2e4','#869ebf'];
+    for(let ch=0;ch<3;ch++){const x=engine.samples(span,ch),base=h*(ch+.5)/3;ctx.strokeStyle=colors[ch];ctx.lineWidth=ch===2?1.2:1.15;ctx.beginPath();for(let j=0;j<x.length;j++){const px=45+j/(span*128)*(w-53),scale=ch===2?h/5:h/3/220;const py=base-Math.max(-h/7,Math.min(h/7,x[j]*scale*gain));if(j)ctx.lineTo(px,py);else ctx.moveTo(px,py);}ctx.stroke();}
+    ctx.font='8px Consolas';ctx.fillStyle='#708b9e';ctx.fillText('-'+span+' s',8,h-6);ctx.fillText(t('agora','now'),w-36,h-6);
+  }
+  function trendChart(){const c=canvas('trend-chart');if(!c)return;const{ctx,w,h}=c;grid(ctx,w,h,4);const history=engine.history,old=Math.max(0,engine.time-120),span=Math.min(engine.time,120)||1;
+    for(const [key,color]of [['demo16','#acecdb'],['demo30','#bab2e4']]){ctx.strokeStyle=color;ctx.lineWidth=1.5;ctx.beginPath();let pen=false;for(const r of history){if(r.time<old)continue;if(r[key]===null){pen=false;continue;}const x=30+(r.time-old)/span*(w-42),y=h-18-r[key]/100*(h-30);if(!pen){ctx.moveTo(x,y);pen=true;}else ctx.lineTo(x,y);}ctx.stroke();}
+    ctx.strokeStyle='#d7b99570';ctx.setLineDash([3,4]);for(const e of engine.events.filter(e=>e.time>=old&&['manual','note','artifact','preset'].includes(e.kind))){const x=30+(e.time-old)/span*(w-42);ctx.beginPath();ctx.moveTo(x,8);ctx.lineTo(x,h-16);ctx.stroke();}ctx.setLineDash([]);ctx.fillStyle='#6e8b9e';ctx.font='8px Consolas';ctx.fillText('100',5,13);ctx.fillText('0',15,h-19);ctx.fillText(clock(old),30,h-4);ctx.fillText(clock(engine.time),w-40,h-4);
+  }
+  function spectrumChart(){const c=canvas('spectrum-chart');if(!c)return;const{ctx,w,h}=c;grid(ctx,w,h,4);const bins=reading.bins,max=Math.max(1,...bins.map(b=>b.power));ctx.beginPath();ctx.moveTo(30,h-28);for(const b of bins){ctx.lineTo(30+b.hz/50*(w-45),h-28-Math.sqrt(b.power/max)*(h-47));}ctx.lineTo(w-15,h-28);ctx.closePath();const gradient=ctx.createLinearGradient(0,0,0,h);gradient.addColorStop(0,'#acecdb60');gradient.addColorStop(1,'#acecdb05');ctx.fillStyle=gradient;ctx.fill();ctx.strokeStyle='#acecdb';ctx.lineWidth=1.3;ctx.stroke();ctx.font='9px Consolas';ctx.fillStyle='#7e9bac';for(const f of [0,10,20,30,40,50])ctx.fillText(f+'',26+f/50*(w-45),h-9);ctx.fillText('Hz',w-19,13);}
+  function spectralHistory(){const c=canvas('spectral-history');if(!c)return;const{ctx,w,h}=c,history=engine.history.slice(-100),colors=['#4cbeab','#668daa','#b4a8db','#82a388','#d4ac7e'];ctx.fillStyle='#0b1927';ctx.fillRect(0,0,w,h);for(let j=0;j<history.length;j++){const r=history[j];let top=h;for(let k=0;k<5;k++){const height=r.bands[k]*h;ctx.fillStyle=r.quality==='usable'?colors[k]:'#273644';ctx.fillRect(j/100*w,top-height,w/100+1,height);top-=height;}}}
+  function renderLab(){if(view==='signals'){waveChart();trendChart();}else if(view==='spectrum'){spectrumChart();spectralHistory();}updateReadings();}
+  const points=[];for(let row=0;row<23;row++){const v=(row+.5)/23*Math.PI;for(let col=0;col<34;col++){const u=col/34*Math.PI*2;const modulation=1+.06*Math.sin(u*5)*Math.sin(v*6);points.push({x:Math.sin(v)*Math.cos(u)*modulation,y:Math.cos(v)*1.1,z:Math.sin(v)*Math.sin(u)*modulation,row,col});}}
+  let pointerX=0,pointerY=0;
+  $('hero-visual').addEventListener('pointermove',e=>{const r=$('hero-visual').getBoundingClientRect();pointerX=(e.clientX-r.left)/r.width-.5;pointerY=(e.clientY-r.top)/r.height-.5;if(!reduced)$('floating-monitor').style.transform='rotateY('+(-18+pointerX*8)+'deg) rotateX('+(11-pointerY*6)+'deg) rotateZ(-3deg)';});
+  $('hero-visual').addEventListener('pointerleave',()=>{pointerX=0;pointerY=0;$('floating-monitor').style.transform='';});
+  function neuralField(seconds){const c=canvas('neural-field');if(!c)return;const{ctx,w,h}=c,rot=(reduced?.35:seconds*.08)+pointerX*.45,pitch=-.12+pointerY*.3,scale=Math.min(w,h)*.34,cx=w*.5,cy=h*.45;const cos=Math.cos(rot),sin=Math.sin(rot),cp=Math.cos(pitch),sp=Math.sin(pitch);const projected=points.map(p=>{const x=p.x*cos+p.z*sin,z=-p.x*sin+p.z*cos,y=p.y*cp-z*sp,zz=p.y*sp+z*cp,k=2.8/(2.8+zz*.55);return{x:cx+x*scale*k,y:cy+y*scale*k,z:zz,row:p.row,col:p.col};});
+    ctx.lineWidth=.65;for(let i=0;i<projected.length;i++){const a=projected[i],b=projected[a.col===33?i-33:i+1];ctx.strokeStyle='rgba(153,204,203,'+(.1+(1-a.z)*.06)+')';ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();if(i+34<projected.length&&a.col%2===0){const d=projected[i+34];ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(d.x,d.y);ctx.stroke();}}
+    projected.sort((a,b)=>b.z-a.z);for(const p of projected){const pulse=.6+.4*Math.sin(seconds*1.4+p.row*.5+p.col*.18);ctx.fillStyle=p.col%7===0?'rgba(186,178,228,'+(.4+pulse*.4)+')':'rgba(172,236,219,'+(.23+(1-p.z)*.2)+')';ctx.beginPath();ctx.arc(p.x,p.y,p.col%7===0?2.2:1.05,0,Math.PI*2);ctx.fill();}
+  }
+  function heroWave(seconds){const c=canvas('hero-wave');if(!c)return;const{ctx,w,h}=c;grid(ctx,w,h,3);for(let ch=0;ch<2;ch++){ctx.strokeStyle=ch?'#bab2e4':'#acecdb';ctx.lineWidth=1.1;ctx.beginPath();for(let x=0;x<w;x+=1.5){const q=x/w*7+seconds*.45,y=h*(ch?.73:.3)+Math.sin(q*18+ch*.7)*h*.09+Math.sin(q*7)*h*.05;if(x)ctx.lineTo(x,y);else ctx.moveTo(x,y);}ctx.stroke();}}
+  function updateScroll(){const h=document.documentElement,den=h.scrollHeight-window.innerHeight;$('scroll-progress').style.width=(den?window.scrollY/den*100:0)+'%';let current=0,nearest=Infinity;$$('.story-step').forEach(el=>{const rect=el.getBoundingClientRect(),distance=Math.abs(rect.top+rect.height/2-window.innerHeight*.53);if(distance<nearest){current=Number(el.dataset.stage);nearest=distance;}});$('technology').dataset.current=current;text('stage-number',String(current+1).padStart(2,'0'));text('stage-label',[t('O sinal vem primeiro','The signal comes first'),t('O passado constrói contexto','The past builds context'),t('Cada saída tem seu alvo','Each output has its target')][current]);$$('.story-stage-indicator i').forEach((el,i)=>el.classList.toggle('active',i===current));}
+  let scrollPending=false;window.addEventListener('scroll',()=>{if(scrollPending)return;scrollPending=true;requestAnimationFrame(()=>{updateScroll();scrollPending=false;});},{passive:true});window.addEventListener('resize',()=>{renderLab();neuralField(performance.now()/1000);heroWave(performance.now()/1000);updateScroll();});
+  if('IntersectionObserver'in window){
+    document.body.classList.add('motion-ready');const reveals=new IntersectionObserver(entries=>{for(const e of entries)if(e.isIntersecting){e.target.classList.add('visible');reveals.unobserve(e.target);}},{threshold:.12});$$('.reveal').forEach(el=>reveals.observe(el));
+    const visibility=new IntersectionObserver(entries=>{for(const e of entries){if(e.target.id==='lab-shell'){labVisible=e.isIntersecting;updatePlay();}if(e.target.id==='hero-visual')heroVisible=e.isIntersecting;}},{rootMargin:'100px'});visibility.observe($('lab-shell'));visibility.observe($('hero-visual'));
+    const navObserver=new IntersectionObserver(entries=>{for(const e of entries)if(e.isIntersecting)$$('#navigation a').forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id));},{rootMargin:'-20% 0px -55% 0px'});['technology','evidence','laboratory','updates'].forEach(id=>navObserver.observe($(id)));
+  }else labVisible=true;
+  function frame(now){const dt=lastFrame?Math.min(.1,(now-lastFrame)/1000):0;lastFrame=now;
+    if(!document.hidden){if(playing&&labVisible)engine.advance(dt);if(now-lastPaint>=40){lastPaint=now;if(heroVisible&&!reduced){neuralField(now/1000);heroWave(now/1000);}if(labVisible){if(now-lastAnalyze>=250){reading=engine.analyze();lastAnalyze=now;}renderLab();}}}
+    requestAnimationFrame(frame);
+  }
+  syncControls();renderEvidence();updateReadings();renderEvents();updatePlay();renderLab();updateScroll();neuralField(1);heroWave(1);requestAnimationFrame(frame);
 })();
